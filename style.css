@@ -11,6 +11,7 @@
     --tag-gtm: #4ecdc4;
     --tag-tools: #ffe66d;
     --tag-insights: #a78bfa;
+    --tag-user: #f472b6;
 }
 
 * {
@@ -128,6 +129,7 @@ header h1 {
 .tag-gtm { background: #4ecdc422; color: var(--tag-gtm); }
 .tag-tools { background: #ffe66d22; color: var(--tag-tools); }
 .tag-insights { background: #a78bfa22; color: var(--tag-insights); }
+.tag-user { background: #f472b622; color: var(--tag-user); }
 
 .card h2 {
     font-size: 1.35rem;
