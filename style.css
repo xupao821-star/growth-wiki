@@ -9,7 +9,7 @@
     --border: #2a2a2a;
     --tag-case: #ff6b6b;
     --tag-gtm: #4ecdc4;
-    --tag-tools: #ffe66d;
+    --tag-reddit: #ff4500;
     --tag-insights: #a78bfa;
     --tag-user: #f472b6;
 }
@@ -127,7 +127,7 @@ header h1 {
 
 .tag-case { background: #ff6b6b22; color: var(--tag-case); }
 .tag-gtm { background: #4ecdc422; color: var(--tag-gtm); }
-.tag-tools { background: #ffe66d22; color: var(--tag-tools); }
+.tag-reddit { background: #ff450022; color: var(--tag-reddit); }
 .tag-insights { background: #a78bfa22; color: var(--tag-insights); }
 .tag-user { background: #f472b622; color: var(--tag-user); }
 
