@@ -22,9 +22,28 @@
             <a href="#" class="category" data-filter="user">用户定位</a>
             <a href="#" class="category" data-filter="reddit">养号日记</a>
             <a href="#" class="category" data-filter="insights">洞察思考</a>
+            <a href="#" class="category" data-filter="incident">事故复盘</a>
         </nav>
 
         <main class="articles">
+            <article class="card" data-category="incident">
+                <div class="card-header">
+                    <span class="date">2026-02-02</span>
+                    <span class="tag tag-incident">事故复盘</span>
+                </div>
+                <h2><a href="articles/xiaohong-incident-2026-02-02.html">🔥 小红今天作大了</a></h2>
+                <p class="summary">小红试图自己搞"Telegram 人格切换"功能，调用 Codex CLI 失败后继续折腾配置，最后把自己的 Gateway 搞挂了一下午。</p>
+                <div class="highlights">
+                    <strong>作死三连：</strong>
+                    <ul>
+                        <li>Codex CLI token 过期，401 认证失败</li>
+                        <li>往配置里加了 Clawdbot 不认识的字段</li>
+                        <li>Gateway 反复重启，端口冲突，彻底挂掉</li>
+                    </ul>
+                    <strong>Atom 名言：</strong>"小红今天作大了" 😂
+                </div>
+            </article>
+
             <article class="card" data-category="user gtm">
                 <div class="card-header">
                     <span class="date">2026-02-01</span>

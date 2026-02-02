@@ -12,6 +12,7 @@
     --tag-reddit: #ff4500;
     --tag-insights: #a78bfa;
     --tag-user: #f472b6;
+    --tag-incident: #ef4444;
 }
 
 * {
@@ -130,6 +131,7 @@ header h1 {
 .tag-reddit { background: #ff450022; color: var(--tag-reddit); }
 .tag-insights { background: #a78bfa22; color: var(--tag-insights); }
 .tag-user { background: #f472b622; color: var(--tag-user); }
+.tag-incident { background: #ef444422; color: var(--tag-incident); }
 
 .card h2 {
     font-size: 1.35rem;

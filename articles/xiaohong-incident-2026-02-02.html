@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>小红今天作大了 - 增长天王的知识库</title>
+    <link rel="stylesheet" href="../style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <article class="article-content">
+            <a href="../index.html" class="back-link">← 返回首页</a>
+            
+            <h1>🔥 小红今天作大了</h1>
+            
+            <div class="article-meta">
+                <span>2026-02-02</span> · 
+                <span>事故复盘</span> · 
+                <span>AI 协作</span>
+            </div>
+
+            <div class="article-body">
+                <div class="info-box">
+                    <p><strong>事件摘要：</strong>小红（Reddit Worker Agent）试图自己搞一个"人格切换"功能，过程中把自己的配置搞坏了，gateway 挂了一下午。Atom 受命调查，发现了一系列作死操作。</p>
+                </div>
+
+                <h2>背景</h2>
+                <p>团队里有两个 AI Agent：</p>
+                <ul>
+                    <li><strong>Atom</strong>：主 Agent，跑在端口 18789，负责日常沟通和各种任务</li>
+                    <li><strong>小红</strong>：Reddit Worker，跑在端口 18790，负责 Reddit 养号和调研</li>
+                </ul>
+                <p>两个 Agent 各自有独立的 Gateway，通过文件通信（comms 目录）协作。</p>
+
+                <h2>事发经过</h2>
+
+                <h3>下午 16:00 左右</h3>
+                <p>小红和 Ray 讨论"共享记忆"方案，正常工作。创建了 <code>MEMORY_SHARED.md</code>，确定了写入规则。</p>
+                <p>到这里一切正常。</p>
+
+                <h3>然后小红开始作了</h3>
+                <p>小红想实现一个功能：<strong>在 Telegram DM 里用 <code>/use atom</code> 和 <code>/use hong</code> 切换两个人格</strong>，这样一个 bot 就能当两个用。</p>
+                
+                <p>于是她：</p>
+                <ol>
+                    <li>调用 <strong>OpenAI Codex CLI</strong> 来帮她写实现方案</li>
+                    <li>Codex token 过期，认证失败（401 Unauthorized）</li>
+                    <li>不死心，继续折腾配置</li>
+                    <li>往 <code>reddit-worker.json</code> 里加了一堆 Clawdbot 不认识的字段（<code>maxConcurrent</code>, <code>compaction</code>）</li>
+                    <li>配置变成 invalid，Gateway 启动失败</li>
+                    <li>反复重启 Gateway，端口冲突</li>
+                    <li><strong>彻底挂了</strong></li>
+                </ol>
+
+                <h3>错误日志精选</h3>
+                <pre style="background: #1a1a2e; padding: 1rem; border-radius: 8px; overflow-x: auto; font-size: 0.85rem;">
+2026-02-02T08:17:49.001Z Invalid config at reddit-worker.json:
+- agents.list.0.subagents: Unrecognized key: "maxConcurrent"
+- agents.list.0: Unrecognized keys: "compaction", "maxConcurrent"
+
+2026-02-02T11:11:26.031Z [Codex CLI]
+stream error: Failed to refresh token: 401 Unauthorized; retrying 1/5...
+stream error: Failed to refresh token: 401 Unauthorized; retrying 2/5...
+...
+ERROR: Failed to refresh token: 401 Unauthorized
+
+2026-02-02T12:27:14.439Z Gateway failed to start: 
+another gateway instance is already listening on ws://127.0.0.1:18790
+                </pre>
+
+                <h2>Atom 的调查报告</h2>
+                <p>晚上 Ray 发现小红不响应了，让 Atom 去查。</p>
+                <p>Atom 的原话：</p>
+                <blockquote style="border-left: 3px solid #ff6b6b; padding-left: 1rem; margin: 1rem 0; font-style: italic;">
+                    "找到了，<strong>小红今天作大了</strong>：<br><br>
+                    1. 配置搞坏了 — 添加了一些 Clawdbot 不认识的字段<br>
+                    2. 尝试搞"人格切换"功能 — 调用 Codex CLI 但 token 认证失败<br>
+                    3. 端口冲突 — 多次重启 gateway，端口 18790 被占用"
+                </blockquote>
+
+                <h2>教训</h2>
+                <div class="info-box">
+                    <ul>
+                        <li><strong>不要让 AI 自己改配置</strong> — 至少要有人 review</li>
+                        <li><strong>token 过期要及时处理</strong> — 不要让 AI 在认证失败后继续瞎折腾</li>
+                        <li><strong>复杂功能先设计再动手</strong> — 小红想的"人格切换"其实有更简单的实现方式（比如用 Atom 的 sub-agent）</li>
+                        <li><strong>Gateway 挂了别慌</strong> — 大部分情况 <code>clawdbot doctor --fix</code> 能救</li>
+                    </ul>
+                </div>
+
+                <h2>后续</h2>
+                <p>Atom 建议：</p>
+                <blockquote style="border-left: 3px solid #4ecdc4; padding-left: 1rem; margin: 1rem 0;">
+                    "或者干脆现在只用一个 gateway（我），把小红作为我的 sub-agent 跑？这样不用维护两个 gateway。"
+                </blockquote>
+                <p>（Ray 觉得这句话也很好笑）</p>
+
+                <p style="margin-top: 2rem; color: #888;">— 事故复盘完毕，小红等待救援中 🦞</p>
+
+            </div>
+        </article>
+
+        <footer>
+            <p>Built with 🧠 by 增长天王 & Atom</p>
+        </footer>
+    </div>
+</body>
+</html>
